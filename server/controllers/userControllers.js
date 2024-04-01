@@ -23,20 +23,38 @@ function generateJWTToken(useremail,phone,role){
     {expiresIn:process.env.JWT_EXPIRY}//for security dont keep permanent tokens
     )
 }
+const confirm=asyncHandler(async(req,res,next)=>{
+    try{
+    const {user_email}=req.body;
+    if(!user_email){
+        return next(new AppError("all fields mandatory",400));
+    }
+    const sql=`select * from user where user_email='${user_email}'`;
+    db.query(sql,(err,data)=>{
+        if(err)return res.json(err);
+        if(data[0]){
+            return next(new AppError("email already exists choose another email",400));
+        }
+        res.status(200).json({
+            success:true,
+            message:"email is free preoceed to register",
+            data:data
+        })
+    })
+    
+    }
+    catch(err){
+        return next(new AppError(err,400));
+    }
+});
 const register=asyncHandler(async(req,res,next)=>{
     try{
     const {user_email,user_name,ph_no,password}=req.body;
     if(!user_email || !password||!user_name||!ph_no){
         return next(new AppError("all fields mandatory",400));
     }
-    const sql=`select * from user where user_email='${user_email}'`;
-    db.query(sql,(err,data)=>{
-        if(err)return res.json(err);
-        if(!data){
-            return next(new AppError("email already exists",400));
-        }
-    })
-    const sql1=`insert into user values('${user_email}','${user_name}',${ph_no},'${password}')`;
+    
+    const sql1=`insert into user(user_email,user_name,ph_no,password) values('${user_email}','${user_name}',${ph_no},'${password}')`;
     db.query(sql1,(err,data)=>{
         if(err)return res.json(err);
         res.status(200).json({
@@ -130,4 +148,4 @@ const getProfile=async(req,res,next)=>{
 
 
 };
-export{register,login,logout,getProfile}
+export{register,login,logout,getProfile,confirm}

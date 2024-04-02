@@ -2,10 +2,10 @@
 
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import HomePage from "./Pages/HomePage"
-import NotFound from './Pages/NotFound'
-import Signup from './Pages/Signuppage'
-import Login from './Pages/login'
+import HomePage from "./Pages/HomePage.jsx"
+import NotFound from './Pages/NotFound.jsx'
+import Signup from './Pages/SignupPage'
+import Login from './Pages/Login'
 import Denied from './Pages/Denied'
 import RequireAuth from './components/RequireAuth'
 

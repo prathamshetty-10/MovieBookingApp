@@ -1,8 +1,8 @@
 
-import HomeLayout from "../layout/Homelayout";
+import HomeLayout from "../../layout/Homelayout";
 
 
-function SignupPage(){
+function Profile(){
 
     return(
         
@@ -13,4 +13,4 @@ function SignupPage(){
     )
 
 }
-export default SignupPage;
+export default Profile;

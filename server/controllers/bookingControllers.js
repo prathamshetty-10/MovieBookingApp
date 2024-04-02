@@ -117,4 +117,25 @@ const getBookings=async(req,res,next)=>{
 
 
 };
-export {lockSeat,unlockSeat,confirmBooking,cancelBooking,getBookings}
+const getAllBookings=async(req,res,next)=>{
+    try{
+    
+    const sql=`select * from booking`;
+    db.query(sql,(err,data)=>{
+        if(err)return res.json(err);
+        res.status(200).json({
+            success:true,
+            message:"successfully obtained bookings",
+            bookings:data
+        })
+    })
+   
+    
+    }
+    catch(err){
+        return next(new AppError(err,400));
+    }
+
+
+};
+export {lockSeat,unlockSeat,confirmBooking,cancelBooking,getBookings,getAllBookings}

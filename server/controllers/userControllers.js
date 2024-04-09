@@ -8,7 +8,7 @@ const cookieOption={
     maxAge:10*24*60*60*1000,
     httpOnly:true,
     sameSite:'none',
-    //secure:true
+    secure:true
    
 };
 
@@ -26,12 +26,14 @@ function generateJWTToken(useremail,phone,role){
 const confirm=asyncHandler(async(req,res,next)=>{
     try{
     const {user_email}=req.body;
+    console.log(user_email);
     if(!user_email){
         return next(new AppError("all fields mandatory",400));
     }
     const sql=`select * from user where user_email='${user_email}'`;
     db.query(sql,(err,data)=>{
-        if(err)return res.json(err);
+        if(err){return res.json(err);}
+        console.log(data[0]);
         if(data[0]){
             return next(new AppError("email already exists choose another email",400));
         }
@@ -54,7 +56,7 @@ const register=asyncHandler(async(req,res,next)=>{
         return next(new AppError("all fields mandatory",400));
     }
     
-    const sql1=`insert into user(user_email,user_name,ph_no,password) values('${user_email}','${user_name}',${ph_no},'${password}')`;
+    const sql1=`insert into user(user_email,user_name,ph_no,password,user_role) values('${user_email}','${user_name}',${ph_no},'${password}','USER')`;
     db.query(sql1,(err,data)=>{
         if(err)return res.json(err);
         res.status(200).json({
@@ -71,7 +73,7 @@ const login=asyncHandler(async(req,res,next)=>{
     try{
     let data1;
     const {user_email,password,ph_no,user_role}=req.body;
-    if(!user_email || !password ||!ph_no || !user_role){
+    if(!user_email || !password ||!ph_no ){
         return next(new AppError("all fields mandatory",400));
     }
     //password match

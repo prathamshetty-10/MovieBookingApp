@@ -4,9 +4,10 @@ import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import HomePage from "./Pages/HomePage.jsx"
 import NotFound from './Pages/NotFound.jsx'
-import Signup from './Pages/SignupPage'
+import Signup from './Pages/SignupPage.jsx'
 import Login from './Pages/Login'
 import Denied from './Pages/Denied'
+import Location from './Pages/Location'
 import RequireAuth from './components/RequireAuth'
 
 import Profile from './Pages/User/Profile'
@@ -28,6 +29,7 @@ function App() {
       
 
       </Route>
+      <Route path='/movies' element={<Location/>}></Route>
 
       <Route path="*" element ={<NotFound/>}></Route>
     </Routes>

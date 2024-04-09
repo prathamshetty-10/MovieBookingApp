@@ -11,6 +11,8 @@ import bookingRoutes from './routes/bookingRoutes.js';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan'
 import errorMiddleware from './middleware/error.middleware.js';
+import cloudinary from 'cloudinary'
+import AppError from './utils/error.util.js';
 
 app.use(express.json());//allowing json data to be sent
 app.use(express.urlencoded({extended:true}))
@@ -21,13 +23,7 @@ app.use(cors({
   credentials:true
 }));
 
-app.get('/movies',(req,res)=>{
-    const sql="drop table movie";
-    db.query(sql,(err,data)=>{
-        if(err)return res.json(err);
-        return res.json(data);
-    })
-})
+
 app.use('/user',userRoutes);
 app.use('/location',locationRoutes);
 app.use('/movie',movieRoutes);

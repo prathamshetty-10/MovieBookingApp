@@ -1,11 +1,11 @@
 
 import mysql from 'mysql'
 const config={
-    host:'sql6.freesqldatabase.com',//localhost
-    user:'sql6695204',//root
-    password:'IcySLKWXzm',//empty''
-    database:'sql6695204',//test
-    port:3306//remove this for localhost
+    host:'localhost', //sql6.freesqldatabase.com
+    user:'root',//sql6695204
+    password:'',//IcySLKWXzm
+    database:'test',//sql6695204
+    //port:3306//remove this for localhost
   
 }
 

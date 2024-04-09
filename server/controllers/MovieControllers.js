@@ -54,6 +54,58 @@ const addMovie=async(req,res,next)=>{
 
 
 };
+const addLoc=async(req,res,next)=>{
+    try{
+        
+        const {loc_id,loc_name}=req.body;
+        let public_id;
+        let secure_url;
+        if(!loc_id||!loc_name){
+            return next(new AppError("all fields are mandatory",400));
+        }
+        if(req.file){
+            
+            try{
+                const result=await cloudinary.v2.uploader.upload(req.file.path,{//arguments path to upload and configuration
+                    folder:'lms',
+                    width: 250,
+                    height:250,//the cloudinary image will be cropped 
+                    gravity:"faces",
+                    crop:'fill'
+                });
+                
+                if(result){
+                    public_id=result.public_id;
+                    secure_url=result.secure_url;
+                    //remove file from uploads folder na
+                    fs.rm(`uploads/${req.file.filename}`);
+                }
+                
+                
+    
+            }
+            catch(error){
+                new AppError(error || "file not uploaded please try again",500);
+    
+            }
+        }
+        const sql=`insert into location values(${loc_id},'${loc_name}','${public_id}','${secure_url}')`;
+        db.query(sql,(err,data)=>{
+            if(err)return res.json(err);
+            res.status(200).json({
+                success:true,
+                message:"successfully added location",
+                data:data
+            })
+        })
+      
+        }
+        catch(err){
+            return next(new AppError(err,400));
+        }
+
+
+};
 const getMovies=async(req,res,next)=>{
     try{
     const {id}=req.params;
@@ -150,4 +202,4 @@ const addSeat=async(req,res,next)=>{
 
 
 };
-export {addMovie,getMovies,addShow,getShow,addSeat}
+export {addMovie,getMovies,addShow,getShow,addSeat,addLoc}

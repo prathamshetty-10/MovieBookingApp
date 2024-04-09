@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 function HomeLayout({children}){
     const dispatch=useDispatch();
     const navigate=useNavigate();
-    const isLoggedIn=useSelector((state)=>state?.auth?.isLoggedIn);
-    const role=useSelector((state)=>state?.auth?.role);
+    const isLoggedIn=useSelector((state)=>state?.auth1?.isLoggedIn);
+    const role=useSelector((state)=>state?.auth1?.role);
     function changeWidth(){
         const drawerSide=document.getElementsByClassName("drawer-side");
         drawerSide[0].style.width="auto";
@@ -65,7 +65,7 @@ function HomeLayout({children}){
                         </li>
                     )}
                     <li className="border border-black bg-white rounded-md font-bold hover:bg-blue-200 m-1 hover:text-blue-600 hover:font-extrabold">
-                        <Link to="/courses">All Movies</Link>
+                        <Link to="/movies">All Movies</Link>
                     </li>
                     <li className="border border-black bg-white rounded-md font-bold hover:bg-blue-200 m-1 hover:text-blue-600 hover:font-extrabold">
                         <Link to="/about">About us</Link>

@@ -1,5 +1,6 @@
 import {FiMenu} from "react-icons/fi"
 import {AiFillCloseCircle} from "react-icons/ai"
+import { useEffect } from "react";
 import {Link, useNavigate} from "react-router-dom"
 import Footer from "../components/footer";
 import { logout } from "../Redux/Slices/AuthSlice";
@@ -28,6 +29,9 @@ function HomeLayout({children}){
         navigate("/")//navigate to home page
 
     }}
+   
+    
+
     return(
         <>
         <div className="min-h-[90vh]">
@@ -59,14 +63,16 @@ function HomeLayout({children}){
                         </li>
 
                     )}
-                    {isLoggedIn && role=="ADMIN" && (
+                    {isLoggedIn &&  (
                         <li className="border border-black bg-white rounded-md font-bold hover:bg-blue-200 m-1 hover:text-blue-600 hover:font-extrabold">
-                        <Link to="/movie/add">Add Movies</Link>
+                        <Link to="/my/bookings">My Bookings</Link>
                         </li>
+
                     )}
-                    <li className="border border-black bg-white rounded-md font-bold hover:bg-blue-200 m-1 hover:text-blue-600 hover:font-extrabold">
+                   
+                    {isLoggedIn && (<li className="border border-black bg-white rounded-md font-bold hover:bg-blue-200 m-1 hover:text-blue-600 hover:font-extrabold">
                         <Link to="/movies">All Movies</Link>
-                    </li>
+                    </li>)}
                     <li className="border border-black bg-white rounded-md font-bold hover:bg-blue-200 m-1 hover:text-blue-600 hover:font-extrabold">
                         <Link to="/about">About us</Link>
                     </li>

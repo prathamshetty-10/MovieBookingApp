@@ -1,16 +1,19 @@
 import AppError from '../utils/error.util.js';
 import {db} from '../config/dbconfig.js'
-import fs from 'fs/promises'
+import fs from 'node:fs';
 import cloudinary from 'cloudinary'
 const addMovie=async(req,res,next)=>{
     try{
-    const {id}=req.params;
-    const {mov_name,mov_desc,rating}=req.body;
+    
+    const {th_id,mov_name,mov_desc,rating,mov_dur}=req.body;
     let public_id;
     let secure_url;
-    if(!mov_name||!mov_desc ||!rating){
+    
+    if(!mov_name||!mov_desc ||!rating || !mov_dur || !th_id){
         return next(new AppError("all fields are mandatory",400));
     }
+    console.log(mov_name);
+    console.log(th_id);
     if(req.file){
         
         try{
@@ -37,7 +40,7 @@ const addMovie=async(req,res,next)=>{
 
         }
     }
-    const sql=`insert into movie values(${id},'${mov_name}','${mov_desc}',${rating},'${public_id}','${secure_url}')`;
+    const sql=`insert into movie values(${th_id},'${mov_name}','${mov_desc}',${rating},'${public_id}','${secure_url}',${mov_dur})`;
     db.query(sql,(err,data)=>{
         if(err)return res.json(err);
         res.status(200).json({
@@ -57,10 +60,10 @@ const addMovie=async(req,res,next)=>{
 const addLoc=async(req,res,next)=>{
     try{
         
-        const {loc_id,loc_name}=req.body;
+        const {loc_name,loc_id}=req.body;
         let public_id;
         let secure_url;
-        if(!loc_id||!loc_name){
+        if(!loc_id){
             return next(new AppError("all fields are mandatory",400));
         }
         if(req.file){
@@ -94,7 +97,7 @@ const addLoc=async(req,res,next)=>{
             if(err)return res.json(err);
             res.status(200).json({
                 success:true,
-                message:"successfully added location",
+                message:"successfully added theatre",
                 data:data
             })
         })
@@ -129,16 +132,20 @@ const getMovies=async(req,res,next)=>{
 };
 const addShow=async(req,res,next)=>{
     try{
-    const {id}=req.params;
-    const {name}=req.params;
-    const {timingstart,ts_1,timingend,te_1}=req.body;
-    const tim_id=id.toString()+`${name}`+timingstart.toString()+ts_1+timingend.toString()+te_1;
     
-    if(!name||!timingend ||!timingstart||!ts_1||!te_1 ||!tim_id){
+    const {th_id,mov_name,timingstart,ts_1,timingend,te_1}=req.body;
+    
+    if(!mov_name||!timingend ||!timingstart||!ts_1||!te_1 ){
+        return next(new AppError("all fields are mandatory",400));
+    }
+
+    const tim_id=th_id.toString()+`${mov_name}`+timingstart.toString()+ts_1+timingend.toString()+te_1;
+    
+    if(!mov_name||!timingend ||!timingstart||!ts_1||!te_1 ||!tim_id){
         return next(new AppError("all fields are mandatory",400));
     }
     
-    const sql=`insert into timing(th_id,mov_name,time_id,timingstart,ts_1,timingend,te_1) values(${id},'${name}','${tim_id}',${timingstart},'${ts_1}',${timingend},'${te_1}')`;
+    const sql=`insert into timing(th_id,mov_name,time_id,timingstart,ts_1,timingend,te_1) values(${th_id},'${mov_name}','${tim_id}',${timingstart},'${ts_1}',${timingend},'${te_1}')`;
     db.query(sql,(err,data)=>{
         if(err)return res.json(err);
         res.status(200).json({
@@ -157,15 +164,16 @@ const addShow=async(req,res,next)=>{
 };
 const getShow=async(req,res,next)=>{
     try{
-    const {id}=req.params;
+    const{id}=req.params;
     const {name}=req.params;
+    
     const sql=`select * from timing where th_id=${id} and mov_name='${name}'`;
     db.query(sql,(err,data)=>{
         if(err)return res.json(err);
         res.status(200).json({
             success:true,
             message:"successfully obtained shows",
-            movies:data
+            timings:data
         })
     })
    
@@ -179,13 +187,13 @@ const getShow=async(req,res,next)=>{
 };
 const addSeat=async(req,res,next)=>{
     try{
-    const {id}=req.params;
-    const {num_seats}=req.body;
+    
+    const {time_id,num_seats}=req.body;
     if(!num_seats){
         return next(new AppError("all fields are mandatory",400));
     }
     
-    const sql=`insert into seat values('${id}',${num_seats})`;
+    const sql=`insert into seat values('${time_id}',${num_seats})`;
     db.query(sql,(err,data)=>{
         if(err)return res.json(err);
         res.status(200).json({
@@ -202,4 +210,29 @@ const addSeat=async(req,res,next)=>{
 
 
 };
-export {addMovie,getMovies,addShow,getShow,addSeat,addLoc}
+const getSeat=async(req,res,next)=>{
+    try{
+    const {id}=req.params;
+  
+    if(!id){
+        return next(new AppError("all fields are mandatory",400));
+    }
+    
+    const sql=`select num_seats from seat where time_id='${id}'`;
+    db.query(sql,(err,data)=>{
+        if(err)return res.json(err);
+        res.status(200).json({
+            success:true,
+            message:"successfully added seats for movie show",
+            seats:data
+        })
+    })
+  
+    }
+    catch(err){
+        return next(new AppError(err,400));
+    }
+
+
+};
+export {addMovie,getMovies,addShow,getShow,addSeat,addLoc,getSeat}

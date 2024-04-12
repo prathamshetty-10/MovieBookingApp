@@ -40,7 +40,7 @@ function Location(){
                 <h1 className="text-2xl lg:text-3xl px-[30vh] text-yellow-500 font-bold">
                     Choose your location
                     </h1>
-                    <div className="mb-15  flex flex-wrap gap-10">
+                    <div className="mb-15  flex flex-wrap gap-10 justify-center">
                         {locationData?.map((element)=>{
                             return <LocationCard key={element.loc_id} data={element}/>
                         })}

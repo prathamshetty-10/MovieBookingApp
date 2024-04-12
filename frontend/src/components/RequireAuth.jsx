@@ -3,7 +3,7 @@ import { Navigate, Outlet} from "react-router-dom";
 
 
 function RequireAuth({allowedRoles}){//array of allowed roles
-    const {isLoggedIn,role}=useSelector((state)=>state.auth);//to get state we gotta use useselector
+    const {isLoggedIn,role}=useSelector((state)=>state.auth1);//to get state we gotta use useselector
 
     
     return isLoggedIn && allowedRoles.find((myRole)=>myRole==role)?(

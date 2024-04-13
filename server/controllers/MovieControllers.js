@@ -1,6 +1,6 @@
 import AppError from '../utils/error.util.js';
 import {db} from '../config/dbconfig.js'
-import fs from 'node:fs';
+
 import cloudinary from 'cloudinary'
 const addMovie=async(req,res,next)=>{
     try{
@@ -28,8 +28,7 @@ const addMovie=async(req,res,next)=>{
             if(result){
                 public_id=result.public_id;
                 secure_url=result.secure_url;
-                //remove file from uploads folder na
-                fs.rm(`uploads/${req.file.filename}`);
+                ;
             }
             
             
@@ -80,8 +79,7 @@ const addLoc=async(req,res,next)=>{
                 if(result){
                     public_id=result.public_id;
                     secure_url=result.secure_url;
-                    //remove file from uploads folder na
-                    fs.rm(`uploads/${req.file.filename}`);
+                    ;
                 }
                 
                 

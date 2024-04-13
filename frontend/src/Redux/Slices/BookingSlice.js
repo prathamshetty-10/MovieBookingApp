@@ -109,6 +109,23 @@ export const getBookings=createAsyncThunk("/my/bookings",async()=>{
         toast.error(error?.response?.data?.message);
     }
 })
+export const cancelBookings=createAsyncThunk("/my/bookings",async(data)=>{
+    try{
+        const response=axiosInstance.post(`/book/cancelBooking`,data);
+        toast.promise(response,{
+            loading:"bookings cancelling!! please wait !!",
+            success:"bookings cancelled successfully",
+            error:"failed to cancel bookings,"
+        });
+       
+        return (await response).data;
+        //whatever u return here comes under action.payload
+
+    }
+    catch(error){
+        toast.error(error?.response?.data?.message);
+    }
+})
 export const getAllBookings=createAsyncThunk("/all/bookings",async()=>{
     try{
         const response=axiosInstance.get(`/book/getAllBookings`);

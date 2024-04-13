@@ -28,11 +28,11 @@ const lockSeat=async(req,res,next)=>{
 const unlockSeat=async(req,res,next)=>{
     try{
     
-    const {time_id,num_seats}=req.body;
-    if(!num_seats || !time_id){
+    const {time_id,num_seat}=req.body;
+    if(!num_seat || !time_id){
         return next(new AppError("all fields are mandatory",400));
     }
-    const sql=`update seat set num_seats=num_seats+${num_seats} where time_id='${time_id}'`;
+    const sql=`update seat set num_seats=num_seats+${num_seat} where time_id='${time_id}'`;
     db.query(sql,(err,data)=>{
         if(err)return res.json(err);
         res.status(200).json({
@@ -77,8 +77,8 @@ const confirmBooking=async(req,res,next)=>{
 };
 const cancelBooking=async(req,res,next)=>{
     try{
-    const {id}=req.params;
-    const sql1=`delete from booking where time_id='${id}'`;
+    const {time_id,user_email,ph_no,num_seat}=req.body;
+    const sql1=`delete from booking where time_id='${time_id}' and user_email='${user_email}' and ph_no=${ph_no} and num_seat=${num_seat} `;
     db.query(sql1,(err,data)=>{
         if(err)return res.json(err);
         res.status(200).json({
